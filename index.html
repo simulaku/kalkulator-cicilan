@@ -410,6 +410,9 @@
     align-items: center;
     gap: 10px;
     border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .tenor-badge {
     background: rgba(79,142,247,0.15);
@@ -422,8 +425,6 @@
     letter-spacing: 0.03em;
   }
   .tenor-title { font-size: 14px; font-weight: 700; color: var(--text); }
-
-  .tenor-body { padding: 16px 18px; }
   .option-row {
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -545,12 +546,17 @@
     border-radius: 6px;
   }
 
-  /* PROTEKSI TAGS */
   .proteksi-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     margin-top: 4px;
+  }
+  .ptag-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
   }
   .ptag {
     background: rgba(110,231,183,0.1);
@@ -561,6 +567,121 @@
     padding: 3px 9px;
     border-radius: 8px;
   }
+  .ptag-price {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent3);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  /* TENOR COLLAPSIBLE */
+  .tenor-header {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .tenor-header:active { opacity: 0.8; }
+  .tenor-toggle-icon {
+    margin-left: auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(79,142,247,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  .tenor-toggle-icon.open {
+    transform: rotate(180deg);
+    background: rgba(110,231,183,0.12);
+    color: var(--accent2);
+  }
+  .tenor-body {
+    padding: 16px 18px;
+    display: none;
+    animation: slideDown 0.3s ease;
+  }
+  .tenor-body.open {
+    display: block;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PROMO TOTAL SETELAH DISKON */
+  .promo-sp-total {
+    font-size: 11px;
+    color: var(--accent3);
+    font-family: var(--mono);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .promo-s2 .promo-sp-total { color: var(--accent); }
+
+  /* SECTION COLLAPSIBLE (inner) */
+  .section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .section-toggle:active { opacity: 0.75; }
+  .section-toggle.s-standard {
+    background: rgba(124,132,158,0.08);
+    border: 1px solid rgba(124,132,158,0.15);
+  }
+  .section-toggle.s-gratis {
+    background: rgba(110,231,183,0.06);
+    border: 1px solid rgba(110,231,183,0.2);
+  }
+  .section-toggle.s-diskon {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+  .section-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .section-toggle-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .s-standard .section-toggle-label { color: var(--muted); }
+  .s-gratis .section-toggle-label { color: var(--accent2); }
+  .s-diskon .section-toggle-label { color: var(--accent3); }
+  .section-toggle-cicilan {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.7;
+  }
+  .section-chevron {
+    font-size: 11px;
+    color: var(--muted);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .section-chevron.open { transform: rotate(180deg); }
+  .section-body {
+    display: none;
+    animation: slideDown 0.25s ease;
+    margin-bottom: 8px;
+  }
+  .section-body.open { display: block; }
 
   /* ACTIONS */
   .action-bar {
@@ -1006,7 +1127,10 @@ function buildResultHTML() {
     html += `<span style="font-size:12px;color:var(--muted)">Tidak ada</span>`;
   } else {
     html += `<div class="proteksi-tags">` + proteksiRows.map(r =>
-      `<span class="ptag">${r.name}</span>`).join('') + `</div>`;
+      `<div class="ptag-wrap">
+        <span class="ptag">${r.name}</span>
+        <span class="ptag-price">${r.val}</span>
+      </div>`).join('') + `</div>`;
   }
   html += `</div></div></div>`;
 
@@ -1021,94 +1145,144 @@ function buildResultHTML() {
 }
 
 function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
-  let html = `<div class="tenor-card fade">
-    <div class="tenor-header">
-      <div class="tenor-badge">${tenor} BLN</div>
-      <div class="tenor-title">Tenor ${tenor} Bulan</div>
-    </div>
-    <div class="tenor-body">`;
+  const cardId = 'tenor-body-' + tenor;
+  const iconId = 'tenor-icon-' + tenor;
 
-  // Standard (tanpa promo) - all tenors
+  // ===== Kalkulasi =====
   const ta = totalAsuransi + akujagaPerBulan * tenor;
   const base = pokok + ta;
   const bungaTotal = base * bunga * tenor;
   const total = base + bungaTotal;
   const cicilan = total / tenor;
 
-  if (tenor === 6) {
-    html += optionRow(false, 'Standard', cicilan, total, null);
-  } else {
-    html += optionRow(false, 'Tanpa Promo', cicilan, total, null);
-
-    // Promo
-    if (tenor === 9) {
-      const taP = totalAsuransi + akujagaPerBulan * 9;
-      const baseP = pokok + taP;
-      const adminP = baseP * 0.073;
-      const totalP = baseP + adminP;
-      const cicilanP = totalP / 8;
-      html += optionRow(true, 'Gratis 1× Cicilan', cicilanP, totalP, 'bayar 9× jika terlambat');
-    }
-    if (tenor === 12) {
-      const taP = totalAsuransi + akujagaPerBulan * 12;
-      const baseP = pokok + taP;
-      const bungaFinal = bunga * 1.10;
-      const bungaTotalP = baseP * bungaFinal * 12;
-      const adminNominal = pokok * 0.01;
-      const totalP = baseP + bungaTotalP + adminNominal;
-      const cicilanP = totalP / 12;
-      const totalPembiayaanP = cicilanP * 11;
-      html += optionRow(true, 'Gratis 1× Cicilan', cicilanP, totalPembiayaanP, 'bayar 12× jika terlambat');
-    }
+  // Promo gratis 1x cicilan
+  let promoGratisHTML = '';
+  if (tenor === 9) {
+    const taP = totalAsuransi + akujagaPerBulan * 9;
+    const baseP = pokok + taP;
+    const adminP = baseP * 0.073;
+    const totalP = baseP + adminP;
+    const cicilanP = totalP / 8;
+    promoGratisHTML = sectionCollapsible(
+      tenor, 'gratis',
+      '🎁 Gratis 1× Cicilan', cicilanP,
+      `<div class="option-row promo" style="border:none;padding:4px 0">
+        <div class="option-cicilan">${rupiah(cicilanP)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+        <div class="option-total">Total dibayar: ${rupiah(totalP)}</div>
+        <div class="option-warn">⚠️ bayar 9× jika terlambat</div>
+      </div>`
+    );
+  }
+  if (tenor === 12) {
+    const taP = totalAsuransi + akujagaPerBulan * 12;
+    const baseP = pokok + taP;
+    const bungaFinal = bunga * 1.10;
+    const bungaTotalP = baseP * bungaFinal * 12;
+    const adminNominal = pokok * 0.01;
+    const totalP = baseP + bungaTotalP + adminNominal;
+    const cicilanP = totalP / 12;
+    const totalPembiayaanP = cicilanP * 11;
+    promoGratisHTML = sectionCollapsible(
+      tenor, 'gratis',
+      '🎁 Gratis 1× Cicilan', cicilanP,
+      `<div class="option-row promo" style="border:none;padding:4px 0">
+        <div class="option-cicilan">${rupiah(cicilanP)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+        <div class="option-total">Total dibayar: ${rupiah(totalPembiayaanP)}</div>
+        <div class="option-warn">⚠️ bayar 12× jika terlambat</div>
+      </div>`
+    );
   }
 
-  // ===== PROMO SPESIAL =====
-  // Promo 1: Diskon 6% maks 300rb — semua tenor, semua toko
+  // Promo spesial diskon
   const diskon6 = Math.min(total * 0.06, 300000);
   const cicilanDiskon6 = (total - diskon6) / tenor;
-
-  // Promo 2: Voucher diskon 5% maks 2jt — khusus Erafone/iBox/EC/MII/GTN/GAN
   const diskon5 = Math.min(total * 0.05, 2000000);
   const cicilanDiskon5 = (total - diskon5) / tenor;
 
-  html += `<div class="promo-spesial-wrap">
-    <div class="promo-spesial-title">🏷️ Promo Spesial</div>
-
-    <div class="promo-spesial-card promo-s1">
+  const promoDiskonHTML = sectionCollapsible(
+    tenor, 'diskon',
+    '🏷️ Promo Diskon', cicilanDiskon6,
+    `<div class="promo-spesial-card promo-s1" style="margin-bottom:8px">
       <div class="promo-sp-label">✨ Diskon 6% — Semua Toko</div>
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon6)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-      <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} dari total pembiayaan (maks Rp 300.000)</div>
+      <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} (maks Rp 300.000)</div>
+      <div class="promo-sp-total">Total setelah diskon: ${rupiah(total - diskon6)}</div>
     </div>
-
     <div class="promo-spesial-card promo-s2">
       <div class="promo-sp-label">🎫 Voucher Diskon 5% — Toko Pilihan</div>
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon5)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-      <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} dari total pembiayaan (maks Rp 2.000.000)</div>
+      <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} (maks Rp 2.000.000)</div>
+      <div class="promo-sp-total">Total setelah diskon: ${rupiah(total - diskon5)}</div>
       <div class="promo-sp-toko">
-        <span class="toko-tag">Erafone</span>
-        <span class="toko-tag">iBox</span>
-        <span class="toko-tag">EC</span>
-        <span class="toko-tag">MII</span>
-        <span class="toko-tag">GTN</span>
-        <span class="toko-tag">GAN</span>
+        <span class="toko-tag">Erafone</span><span class="toko-tag">iBox</span>
+        <span class="toko-tag">EC</span><span class="toko-tag">MII</span>
+        <span class="toko-tag">GTN</span><span class="toko-tag">GAN</span>
       </div>
+    </div>`
+  );
+
+  // Label section standard
+  const stdLabel = 'Tanpa Promo';
+  const stdHTML = sectionCollapsible(
+    tenor, 'standard',
+    `📋 ${stdLabel}`, cicilan,
+    `<div class="option-row" style="border:none;padding:4px 0">
+      <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+      <div class="option-total">Total: ${rupiah(total)}</div>
+    </div>`
+  );
+
+  let html = `<div class="tenor-card fade">
+    <div class="tenor-header" onclick="toggleTenor(${tenor})">
+      <div class="tenor-badge">${tenor} BLN</div>
+      <div class="tenor-title">Tenor ${tenor} Bulan</div>
+      <div class="tenor-toggle-icon" id="${iconId}">▼</div>
+    </div>
+    <div class="tenor-body" id="${cardId}">
+      ${stdHTML}
+      ${promoGratisHTML}
+      ${promoDiskonHTML}
     </div>
   </div>`;
 
-  html += `</div></div>`;
   return html;
 }
 
-function optionRow(isPromo, label, cicilan, total, warn) {
-  return `<div class="option-row${isPromo ? ' promo' : ''}">
-    <div class="option-label">
-      ${isPromo ? '🎁' : '📋'} ${label}
-      ${isPromo ? '<span class="promo-tag">PROMO</span>' : ''}
+function sectionCollapsible(tenor, type, label, cicilan, bodyHTML) {
+  const id = `sec-${tenor}-${type}`;
+  const chevId = `chev-${tenor}-${type}`;
+  return `
+    <div class="section-toggle s-${type}" onclick="toggleSection('${id}','${chevId}')">
+      <div class="section-toggle-left">
+        <span class="section-toggle-label">${label}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="section-toggle-cicilan">${rupiah(cicilan)}/bln</span>
+        <span class="section-chevron" id="${chevId}">▼</span>
+      </div>
     </div>
-    <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-    <div class="option-total">Total: ${rupiah(total)}</div>
-    ${warn ? `<div class="option-warn">⚠️ ${warn}</div>` : ''}
-  </div>`;
+    <div class="section-body" id="${id}">
+      ${bodyHTML}
+    </div>`;
+}
+
+/* ========== TENOR TOGGLE ========== */
+function toggleTenor(tenor) {
+  const body = document.getElementById('tenor-body-' + tenor);
+  const icon = document.getElementById('tenor-icon-' + tenor);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  icon.classList.toggle('open', !isOpen);
+}
+
+function toggleSection(bodyId, chevId) {
+  const body = document.getElementById(bodyId);
+  const chev = document.getElementById(chevId);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chev) chev.classList.toggle('open', !isOpen);
 }
 
 /* ========== RESET ========== */
