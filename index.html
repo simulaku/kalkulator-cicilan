@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kalkulator Cicilan</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3248;
+    --accent: #4f8ef7;
+    --accent2: #6ee7b7;
+    --accent3: #f59e0b;
+    --text: #f0f2ff;
+    --muted: #7c849e;
+    --danger: #f87171;
+    --card-radius: 20px;
+    --font: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    font-family: var(--font);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+    padding: 54px 24px 28px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(79,142,247,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.25);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    padding: 18px 24px 0;
+  }
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .step-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .step-dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    box-shadow: 0 0 14px rgba(79,142,247,0.4);
+  }
+  .step-dot.done {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #0f1117;
+  }
+  .step-dot.done::after {
+    content: '✓';
+    font-size: 12px;
+  }
+  .step-dot.done span { display: none; }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    transition: background 0.3s ease;
+  }
+  .step-line.done { background: var(--accent2); }
+  .step-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding: 0 0px;
+  }
+  .step-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    width: 28px;
+    text-align: center;
+  }
+  .step-label.active { color: var(--accent); }
+
+  /* CONTENT */
+  .content {
+    padding: 20px 24px 100px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    animation: slideUp 0.35s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  /* INPUT NOMINAL */
+  .nominal-display {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -1px;
+    min-height: 44px;
+    padding: 10px 0 4px;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 16px;
+    cursor: text;
+    transition: border-color 0.2s;
+  }
+  .nominal-display.empty { color: var(--muted); font-size: 22px; }
+  .nominal-display:focus { outline: none; border-color: var(--accent2); }
+
+  /* NUMPAD */
+  .numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .numpad-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    height: 54px;
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-user-select: none; user-select: none;
+  }
+  .numpad-btn:active { transform: scale(0.93); background: var(--border); }
+  .numpad-btn.zero { grid-column: span 2; }
+  .numpad-btn.del {
+    color: var(--danger);
+    font-size: 22px;
+  }
+  .numpad-btn.next-btn {
+    grid-column: span 3;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 700;
+    height: 52px;
+    border-radius: 16px;
+    letter-spacing: 0.02em;
+    margin-top: 6px;
+  }
+  .numpad-btn.next-btn:active { transform: scale(0.97); background: #3d7fe8; }
+
+  /* TOGGLE BUTTONS */
+  .toggle-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-user-select: none; user-select: none;
+  }
+  .toggle-btn.selected {
+    border-color: var(--accent2);
+    background: rgba(110,231,183,0.07);
+  }
+  .toggle-btn.selected .toggle-check {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .toggle-btn.selected .toggle-check::after { opacity: 1; }
+  .toggle-check {
+    width: 22px; height: 22px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .toggle-check::after {
+    content: '✓';
+    color: #0f1117;
+    font-size: 13px;
+    font-weight: 800;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .toggle-info { flex: 1; }
+  .toggle-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .toggle-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .toggle-price {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent3);
+    font-weight: 500;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* PROTEKSI YN */
+  .yn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .yn-btn {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    -webkit-user-select: none; user-select: none;
+  }
+  .yn-btn:active { transform: scale(0.95); }
+  .yn-btn.yn-yes { border-color: var(--accent2); background: rgba(110,231,183,0.07); }
+  .yn-btn.yn-no { border-color: var(--border); }
+  .yn-icon { font-size: 28px; margin-bottom: 6px; }
+  .yn-label { font-size: 13px; font-weight: 700; }
+  .yn-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* BUNGA GRID */
+  .bunga-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .bunga-btn {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    -webkit-user-select: none; user-select: none;
+  }
+  .bunga-btn:active { transform: scale(0.94); }
+  .bunga-btn.selected {
+    border-color: var(--accent);
+    background: rgba(79,142,247,0.1);
+  }
+  .bunga-rate {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .bunga-label { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 600; }
+
+  /* RESULT */
+  .result-header {
+    background: linear-gradient(135deg, rgba(79,142,247,0.15), rgba(110,231,183,0.08));
+    border: 1px solid rgba(79,142,247,0.2);
+    border-radius: var(--card-radius);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .result-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .result-header-row:last-child { margin-bottom: 0; }
+  .result-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .result-value {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .result-value.big {
+    font-size: 22px;
+    color: var(--accent2);
+    letter-spacing: -0.5px;
+  }
+
+  /* TENOR CARD */
+  .tenor-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .tenor-header {
+    background: var(--surface2);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tenor-badge {
+    background: rgba(79,142,247,0.15);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-family: var(--mono);
+    letter-spacing: 0.03em;
+  }
+  .tenor-title { font-size: 14px; font-weight: 700; color: var(--text); }
+
+  .tenor-body { padding: 16px 18px; }
+  .option-row {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px 15px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-row:last-child { margin-bottom: 0; }
+  .option-row.promo {
+    border-color: rgba(245,158,11,0.3);
+    background: rgba(245,158,11,0.04);
+  }
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .promo-tag {
+    background: rgba(245,158,11,0.15);
+    color: var(--accent3);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+  .option-cicilan {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .option-total {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+  .option-warn {
+    font-size: 11px;
+    color: var(--danger);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.8;
+  }
+
+  /* PROTEKSI TAGS */
+  .proteksi-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .ptag {
+    background: rgba(110,231,183,0.1);
+    border: 1px solid rgba(110,231,183,0.25);
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 8px;
+  }
+
+  /* ACTIONS */
+  .action-bar {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    padding: 12px 20px 24px;
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    display: flex;
+    gap: 10px;
+  }
+  .btn {
+    flex: 1;
+    height: 52px;
+    border-radius: 16px;
+    border: none;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    -webkit-user-select: none; user-select: none;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+  }
+  .btn-primary:active { background: #3d7fe8; }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    flex: 0 0 52px;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  /* SCREEN MGMT */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ASURANSI INFO */
+  .info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(79,142,247,0.1);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  /* SEPARATOR */
+  .sep {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  .fade { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* DARK SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">💳 Kredit</div>
+    <h1>Kalkulator<br>Cicilan</h1>
+    <p>Simulasi cicilan cepat & akurat</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="step-dot active" id="dot1"><span>1</span></div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2"><span>2</span></div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3"><span>3</span></div>
+      <div class="step-line" id="line3"></div>
+      <div class="step-dot" id="dot4"><span>4</span></div>
+    </div>
+    <div class="step-labels">
+      <div class="step-label active" id="lbl1">Nominal</div>
+      <div class="step-label" style="width:auto;flex:1;text-align:center;"></div>
+      <div class="step-label" id="lbl2">Proteksi</div>
+      <div class="step-label" style="width:auto;flex:1;text-align:center;"></div>
+      <div class="step-label" id="lbl3">Bunga</div>
+      <div class="step-label" style="width:auto;flex:1;text-align:center;"></div>
+      <div class="step-label" id="lbl4">Hasil</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STEP 1: NOMINAL -->
+    <div class="screen active" id="screen-nominal">
+      <div class="card">
+        <div class="card-title">💰 Nominal Transaksi</div>
+        <div class="nominal-display empty" id="nominalDisplay">Masukkan jumlah...</div>
+        <div class="numpad">
+          <button class="numpad-btn" onclick="numpadInput('1')">1</button>
+          <button class="numpad-btn" onclick="numpadInput('2')">2</button>
+          <button class="numpad-btn" onclick="numpadInput('3')">3</button>
+          <button class="numpad-btn" onclick="numpadInput('4')">4</button>
+          <button class="numpad-btn" onclick="numpadInput('5')">5</button>
+          <button class="numpad-btn" onclick="numpadInput('6')">6</button>
+          <button class="numpad-btn" onclick="numpadInput('7')">7</button>
+          <button class="numpad-btn" onclick="numpadInput('8')">8</button>
+          <button class="numpad-btn" onclick="numpadInput('9')">9</button>
+          <button class="numpad-btn zero" onclick="numpadInput('0')">0</button>
+          <button class="numpad-btn del" onclick="numpadDel()">⌫</button>
+          <button class="numpad-btn next-btn" onclick="goToProteksi()">Lanjut →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: PROTEKSI YN + PILIH -->
+    <div class="screen" id="screen-proteksi">
+      <div class="card">
+        <div class="card-title">🛡️ Pakai Proteksi?</div>
+        <div class="yn-grid" id="ynGrid">
+          <div class="yn-btn" id="ynYes" onclick="setProteksiYN(true)">
+            <div class="yn-icon">✅</div>
+            <div class="yn-label">Pakai</div>
+            <div class="yn-sub">Dengan proteksi</div>
+          </div>
+          <div class="yn-btn" id="ynNo" onclick="setProteksiYN(false)">
+            <div class="yn-icon">❌</div>
+            <div class="yn-label">Tanpa</div>
+            <div class="yn-sub">Skip proteksi</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="proteksiList" style="display:none">
+        <div class="card">
+          <div class="card-title">☑️ Pilih Proteksi</div>
+          <div class="info-chip">ℹ️ Boleh pilih lebih dari satu</div>
+          <div class="toggle-grid" id="asuransiToggles">
+            <div class="toggle-btn" id="t-AKUJAGA" onclick="toggleAsuransi('AKUJAGA')">
+              <div class="toggle-check"></div>
+              <div class="toggle-info">
+                <div class="toggle-name">AKUJAGA</div>
+                <div class="toggle-desc">Perlindungan jiwa peminjam</div>
+              </div>
+              <div class="toggle-price" id="price-AKUJAGA">–</div>
+            </div>
+            <div class="toggle-btn" id="t-GADGET" onclick="toggleAsuransi('GADGET')">
+              <div class="toggle-check"></div>
+              <div class="toggle-info">
+                <div class="toggle-name">Gadget Pro</div>
+                <div class="toggle-desc">Proteksi perangkat elektronik</div>
+              </div>
+              <div class="toggle-price" id="price-GADGET">–</div>
+            </div>
+            <div class="toggle-btn" id="t-AKUSIAGA" onclick="toggleAsuransi('AKUSIAGA')">
+              <div class="toggle-check"></div>
+              <div class="toggle-info">
+                <div class="toggle-name">AKUSIAGA</div>
+                <div class="toggle-desc">Perlindungan kecelakaan diri</div>
+              </div>
+              <div class="toggle-price">Rp 299.000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: BUNGA -->
+    <div class="screen" id="screen-bunga">
+      <div class="card">
+        <div class="card-title">📈 Bunga per Bulan</div>
+        <div class="bunga-grid">
+          <div class="bunga-btn" onclick="selectBunga(0.025)"><div class="bunga-rate">2.5%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.03)"><div class="bunga-rate">3.0%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.035)"><div class="bunga-rate">3.5%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.04)"><div class="bunga-rate">4.0%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.045)"><div class="bunga-rate">4.5%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.05)"><div class="bunga-rate">5.0%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.055)"><div class="bunga-rate">5.5%</div><div class="bunga-label">/ bulan</div></div>
+          <div class="bunga-btn" onclick="selectBunga(0.06)"><div class="bunga-rate">6.0%</div><div class="bunga-label">/ bulan</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: RESULT -->
+    <div class="screen" id="screen-result">
+      <div id="resultContent"></div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- ACTION BAR -->
+  <div class="action-bar" id="actionBar">
+    <!-- Dynamic buttons injected by JS -->
+  </div>
+
+</div><!-- /app -->
+
+<script>
+/* ========== STATE ========== */
+let state = {
+  nominal: '',
+  asuransi: [],
+  pakaProteksi: null,
+  bunga: null
+};
+
+/* ========== STEP MANAGEMENT ========== */
+let currentStep = 1;
+
+function showScreen(n) {
+  currentStep = n;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(['','screen-nominal','screen-proteksi','screen-bunga','screen-result'][n]).classList.add('active');
+  updateProgress(n);
+  updateActionBar(n);
+  window.scrollTo(0, 0);
+}
+
+function updateProgress(step) {
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    dot.className = 'step-dot';
+    if (lbl) lbl.className = 'step-label';
+    if (i < step) { dot.classList.add('done'); dot.innerHTML = ''; }
+    else if (i === step) { dot.classList.add('active'); dot.innerHTML = '<span>' + i + '</span>'; if(lbl) lbl.classList.add('active'); }
+    else dot.innerHTML = '<span>' + i + '</span>';
+    if (i < 4) {
+      const line = document.getElementById('line' + i);
+      if (line) line.className = 'step-line' + (i < step ? ' done' : '');
+    }
+  }
+}
+
+function updateActionBar(step) {
+  const bar = document.getElementById('actionBar');
+  if (step === 1) {
+    bar.innerHTML = '';
+    return;
+  }
+  if (step === 2) {
+    bar.innerHTML = `
+      <button class="btn btn-secondary" onclick="showScreen(1)">←</button>
+      <button class="btn btn-primary" onclick="goToBunga()">Lanjut ke Bunga →</button>`;
+    return;
+  }
+  if (step === 3) {
+    bar.innerHTML = `
+      <button class="btn btn-secondary" onclick="showScreen(2)">←</button>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;">Pilih bunga di atas</div>`;
+    return;
+  }
+  if (step === 4) {
+    bar.innerHTML = `
+      <button class="btn btn-ghost" onclick="showScreen(3)" style="flex:0 0 auto;padding:0 14px;">Bunga</button>
+      <button class="btn btn-ghost" onclick="showScreen(2)" style="flex:0 0 auto;padding:0 14px;">Proteksi</button>
+      <button class="btn btn-primary" onclick="resetAll()">🔄 Hitung Ulang</button>`;
+    return;
+  }
+}
+
+/* ========== NUMPAD ========== */
+function numpadInput(d) {
+  if (state.nominal.length >= 12) return;
+  state.nominal += d;
+  renderNominal();
+}
+function numpadDel() {
+  state.nominal = state.nominal.slice(0, -1);
+  renderNominal();
+}
+function renderNominal() {
+  const el = document.getElementById('nominalDisplay');
+  if (!state.nominal) {
+    el.textContent = 'Masukkan jumlah...';
+    el.className = 'nominal-display empty';
+  } else {
+    el.textContent = 'Rp ' + parseInt(state.nominal).toLocaleString('id-ID');
+    el.className = 'nominal-display';
+  }
+}
+function goToProteksi() {
+  if (!state.nominal || parseInt(state.nominal) < 100000) {
+    shake(document.getElementById('nominalDisplay'));
+    return;
+  }
+  updateAkujagaPrice();
+  updateGadgetPrice();
+  showScreen(2);
+}
+function shake(el) {
+  el.style.animation = 'none';
+  el.offsetHeight;
+  el.style.animation = 'shake 0.4s ease';
+  setTimeout(() => el.style.animation = '', 400);
+}
+
+/* ========== PROTEKSI ========== */
+function setProteksiYN(yn) {
+  state.pakaProteksi = yn;
+  if (yn) {
+    document.getElementById('ynYes').className = 'yn-btn yn-yes';
+    document.getElementById('ynNo').className = 'yn-btn';
+    document.getElementById('proteksiList').style.display = 'block';
+  } else {
+    document.getElementById('ynNo').className = 'yn-btn yn-no';
+    document.getElementById('ynYes').className = 'yn-btn';
+    document.getElementById('proteksiList').style.display = 'none';
+    state.asuransi = [];
+  }
+}
+
+function toggleAsuransi(key) {
+  const idx = state.asuransi.indexOf(key);
+  if (idx >= 0) state.asuransi.splice(idx, 1);
+  else state.asuransi.push(key);
+  renderToggles();
+}
+
+function renderToggles() {
+  ['AKUJAGA', 'GADGET', 'AKUSIAGA'].forEach(k => {
+    const el = document.getElementById('t-' + k);
+    if (!el) return;
+    el.classList.toggle('selected', state.asuransi.includes(k));
+  });
+}
+
+function updateAkujagaPrice() {
+  const nominal = parseInt(state.nominal) || 0;
+  const perBulan = nominal * 0.006;
+  const el = document.getElementById('price-AKUJAGA');
+  if (el) el.textContent = rupiah(perBulan) + '/bln';
+}
+function updateGadgetPrice() {
+  const nominal = parseInt(state.nominal) || 0;
+  const g = gadgetPro(nominal);
+  const el = document.getElementById('price-GADGET');
+  if (el) el.textContent = rupiah(g);
+}
+
+function goToBunga() {
+  showScreen(3);
+}
+
+/* ========== BUNGA ========== */
+function selectBunga(rate) {
+  state.bunga = rate;
+  document.querySelectorAll('.bunga-btn').forEach(b => b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  setTimeout(() => {
+    buildAndShowResult();
+    showScreen(4);
+  }, 200);
+}
+
+/* ========== RESULT ========== */
+function buildAndShowResult() {
+  const el = document.getElementById('resultContent');
+  el.innerHTML = buildResultHTML();
+}
+
+function buildResultHTML() {
+  const pokok = parseInt(state.nominal);
+  const bunga = state.bunga;
+  const as = state.asuransi;
+
+  let totalAsuransi = 0;
+  let akujagaPerBulan = 0;
+  let proteksiRows = [];
+
+  if (as.includes('AKUJAGA')) {
+    akujagaPerBulan = pokok * 0.006;
+    proteksiRows.push({ name: 'AKUJAGA', val: rupiah(akujagaPerBulan) + '/bln' });
+  }
+  if (as.includes('GADGET')) {
+    const g = gadgetPro(pokok);
+    totalAsuransi += g;
+    proteksiRows.push({ name: 'Gadget Pro', val: rupiah(g) });
+  }
+  if (as.includes('AKUSIAGA')) {
+    totalAsuransi += 299000;
+    proteksiRows.push({ name: 'AKUSIAGA', val: 'Rp 299.000' });
+  }
+
+  // Summary header
+  let html = `<div class="result-header fade">
+    <div class="result-header-row">
+      <div class="result-label">Nominal Pokok</div>
+      <div class="result-value big">${rupiah(pokok)}</div>
+    </div>
+    <div class="sep" style="margin:10px 0"></div>
+    <div class="result-header-row">
+      <div class="result-label">Bunga / Bulan</div>
+      <div class="result-value">${(bunga * 100).toFixed(1)}%</div>
+    </div>
+    <div class="result-header-row">
+      <div class="result-label">Proteksi</div>
+      <div>`;
+
+  if (proteksiRows.length === 0) {
+    html += `<span style="font-size:12px;color:var(--muted)">Tidak ada</span>`;
+  } else {
+    html += `<div class="proteksi-tags">` + proteksiRows.map(r =>
+      `<span class="ptag">${r.name}</span>`).join('') + `</div>`;
+  }
+  html += `</div></div></div>`;
+
+  // Tenor 6
+  html += buildTenorCard(6, pokok, bunga, akujagaPerBulan, totalAsuransi);
+  // Tenor 9
+  html += buildTenorCard(9, pokok, bunga, akujagaPerBulan, totalAsuransi);
+  // Tenor 12
+  html += buildTenorCard(12, pokok, bunga, akujagaPerBulan, totalAsuransi);
+
+  return html;
+}
+
+function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
+  let html = `<div class="tenor-card fade">
+    <div class="tenor-header">
+      <div class="tenor-badge">${tenor} BLN</div>
+      <div class="tenor-title">Tenor ${tenor} Bulan</div>
+    </div>
+    <div class="tenor-body">`;
+
+  // Standard (tanpa promo) - all tenors
+  const ta = totalAsuransi + akujagaPerBulan * tenor;
+  const base = pokok + ta;
+  const bungaTotal = base * bunga * tenor;
+  const total = base + bungaTotal;
+  const cicilan = total / tenor;
+
+  if (tenor === 6) {
+    html += optionRow(false, 'Standard', cicilan, total, null);
+  } else {
+    html += optionRow(false, 'Tanpa Promo', cicilan, total, null);
+
+    // Promo
+    if (tenor === 9) {
+      const taP = totalAsuransi + akujagaPerBulan * 9;
+      const baseP = pokok + taP;
+      const adminP = baseP * 0.073;
+      const totalP = baseP + adminP;
+      const cicilanP = totalP / 8;
+      html += optionRow(true, 'Gratis 1× Cicilan', cicilanP, totalP, 'bayar 9× jika terlambat');
+    }
+    if (tenor === 12) {
+      const taP = totalAsuransi + akujagaPerBulan * 12;
+      const baseP = pokok + taP;
+      const bungaFinal = bunga * 1.10;
+      const bungaTotalP = baseP * bungaFinal * 12;
+      const adminNominal = pokok * 0.01;
+      const totalP = baseP + bungaTotalP + adminNominal;
+      const cicilanP = totalP / 12;
+      const totalPembiayaanP = cicilanP * 11;
+      html += optionRow(true, 'Gratis 1× Cicilan', cicilanP, totalPembiayaanP, 'bayar 12× jika terlambat');
+    }
+  }
+
+  html += `</div></div>`;
+  return html;
+}
+
+function optionRow(isPromo, label, cicilan, total, warn) {
+  return `<div class="option-row${isPromo ? ' promo' : ''}">
+    <div class="option-label">
+      ${isPromo ? '🎁' : '📋'} ${label}
+      ${isPromo ? '<span class="promo-tag">PROMO</span>' : ''}
+    </div>
+    <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+    <div class="option-total">Total: ${rupiah(total)}</div>
+    ${warn ? `<div class="option-warn">⚠️ ${warn}</div>` : ''}
+  </div>`;
+}
+
+/* ========== RESET ========== */
+function resetAll() {
+  state = { nominal: '', asuransi: [], pakaProteksi: null, bunga: null };
+  document.getElementById('nominalDisplay').textContent = 'Masukkan jumlah...';
+  document.getElementById('nominalDisplay').className = 'nominal-display empty';
+  document.getElementById('proteksiList').style.display = 'none';
+  document.getElementById('ynYes').className = 'yn-btn';
+  document.getElementById('ynNo').className = 'yn-btn';
+  renderToggles();
+  document.querySelectorAll('.bunga-btn').forEach(b => b.classList.remove('selected'));
+  showScreen(1);
+}
+
+/* ========== UTIL ========== */
+function gadgetPro(n) {
+  if (n <= 2000000) return 159000;
+  if (n <= 3000000) return 199000;
+  if (n <= 4000000) return 259000;
+  if (n <= 6000000) return 299000;
+  if (n <= 10000000) return 399000;
+  if (n <= 16000000) return 499000;
+  if (n <= 20000000) return 599000;
+  return 899000;
+}
+function rupiah(n) {
+  return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+}
+
+// Shake animation
+const style = document.createElement('style');
+style.textContent = `@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }`;
+document.head.appendChild(style);
+
+// Init
+updateProgress(1);
+updateActionBar(1);
+</script>
+</body>
+</html>
