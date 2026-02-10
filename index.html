@@ -462,6 +462,72 @@
     opacity: 0.8;
   }
 
+  /* PROMO SPESIAL SECTION */
+  .promo-spesial-wrap {
+    margin-top: 10px;
+    border-top: 1px dashed rgba(245,158,11,0.25);
+    padding-top: 10px;
+  }
+  .promo-spesial-title {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent3);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .promo-spesial-card {
+    border-radius: 12px;
+    padding: 11px 13px;
+    margin-bottom: 8px;
+  }
+  .promo-spesial-card:last-child { margin-bottom: 0; }
+  .promo-s1 {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.25);
+  }
+  .promo-s2 {
+    background: rgba(79,142,247,0.07);
+    border: 1px solid rgba(79,142,247,0.25);
+  }
+  .promo-sp-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 3px;
+  }
+  .promo-s2 .promo-sp-label { color: var(--accent); }
+  .promo-sp-cicilan {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .promo-sp-detail {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .promo-sp-toko {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 5px;
+  }
+  .toko-tag {
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.2);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+  }
+
   /* PROTEKSI TAGS */
   .proteksi-tags {
     display: flex;
@@ -564,8 +630,8 @@
   <!-- HEADER -->
   <div class="header">
     <div class="header-badge">💳 Kredit</div>
-    <h1>Kalkulator<br>Cicilan</h1>
-    <p>Simulasi cicilan cepat & akurat</p>
+    <h1>SIMULAKU</h1>
+    <p>Simulasi masih perkiraan, bukan angka pasti.</p>
   </div>
 
   <!-- PROGRESS -->
@@ -745,6 +811,8 @@ function updateActionBar(step) {
     bar.innerHTML = `
       <button class="btn btn-secondary" onclick="showScreen(1)">←</button>
       <button class="btn btn-primary" onclick="goToBunga()">Lanjut ke Bunga →</button>`;
+    // Sembunyikan tombol lanjut jika belum pilih pakai proteksi
+    updateActionBarStep2();
     return;
   }
   if (step === 3) {
@@ -805,11 +873,14 @@ function setProteksiYN(yn) {
     document.getElementById('ynYes').className = 'yn-btn yn-yes';
     document.getElementById('ynNo').className = 'yn-btn';
     document.getElementById('proteksiList').style.display = 'block';
+    updateActionBarStep2();
   } else {
     document.getElementById('ynNo').className = 'yn-btn yn-no';
     document.getElementById('ynYes').className = 'yn-btn';
     document.getElementById('proteksiList').style.display = 'none';
     state.asuransi = [];
+    // Langsung lanjut ke bunga jika pilih tanpa proteksi
+    setTimeout(() => showScreen(3), 250);
   }
 }
 
@@ -839,6 +910,19 @@ function updateGadgetPrice() {
   const g = gadgetPro(nominal);
   const el = document.getElementById('price-GADGET');
   if (el) el.textContent = rupiah(g);
+}
+
+function updateActionBarStep2() {
+  if (currentStep !== 2) return;
+  const bar = document.getElementById('actionBar');
+  const lanjutBtn = bar.querySelector('.btn-primary');
+  if (!lanjutBtn) return;
+  // Tampilkan tombol lanjut hanya jika pilih pakai proteksi
+  if (state.pakaProteksi === true) {
+    lanjutBtn.style.display = 'flex';
+  } else {
+    lanjutBtn.style.display = 'none';
+  }
 }
 
 function goToBunga() {
@@ -959,6 +1043,39 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
       html += optionRow(true, 'Gratis 1× Cicilan', cicilanP, totalPembiayaanP, 'bayar 12× jika terlambat');
     }
   }
+
+  // ===== PROMO SPESIAL =====
+  // Promo 1: Diskon 6% maks 300rb — semua tenor, semua toko
+  const diskon6 = Math.min(cicilan * 0.06, 300000);
+  const cicilanDiskon6 = cicilan - diskon6;
+
+  // Promo 2: Voucher diskon 5% maks 2jt — khusus Erafone/iBox/EC/MII/GTN/GAN
+  const diskon5 = Math.min(total * 0.05, 2000000);
+  const cicilanDiskon5 = (total - diskon5) / tenor;
+
+  html += `<div class="promo-spesial-wrap">
+    <div class="promo-spesial-title">🏷️ Promo Spesial</div>
+
+    <div class="promo-spesial-card promo-s1">
+      <div class="promo-sp-label">✨ Diskon 6% — Semua Toko</div>
+      <div class="promo-sp-cicilan">${rupiah(cicilanDiskon6)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+      <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} dari cicilan pertama (maks Rp 300.000)</div>
+    </div>
+
+    <div class="promo-spesial-card promo-s2">
+      <div class="promo-sp-label">🎫 Voucher Diskon 5% — Toko Pilihan</div>
+      <div class="promo-sp-cicilan">${rupiah(cicilanDiskon5)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+      <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} dari total (maks Rp 2.000.000)</div>
+      <div class="promo-sp-toko">
+        <span class="toko-tag">Erafone</span>
+        <span class="toko-tag">iBox</span>
+        <span class="toko-tag">EC</span>
+        <span class="toko-tag">MII</span>
+        <span class="toko-tag">GTN</span>
+        <span class="toko-tag">GAN</span>
+      </div>
+    </div>
+  </div>`;
 
   html += `</div></div>`;
   return html;
