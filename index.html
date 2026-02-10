@@ -86,6 +86,20 @@
     margin-top: 6px;
     font-weight: 500;
   }
+  .header-mascot {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px;
+    height: 80px;
+    animation: bounce 2s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(-5px) rotate(-5deg); }
+  }
 
   /* PROGRESS */
   .progress-wrap {
@@ -632,6 +646,7 @@
     <div class="header-badge">💳 Kredit</div>
     <h1>SIMULAKU</h1>
     <p>Simulasi masih perkiraan, bukan angka pasti.</p>
+    <img src="akulaku_ladybug_belanja.png" alt="Akulaku Mascot" class="header-mascot">
   </div>
 
   <!-- PROGRESS -->
@@ -1046,8 +1061,8 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
 
   // ===== PROMO SPESIAL =====
   // Promo 1: Diskon 6% maks 300rb — semua tenor, semua toko
-  const diskon6 = Math.min(cicilan * 0.06, 300000);
-  const cicilanDiskon6 = cicilan - diskon6;
+  const diskon6 = Math.min(total * 0.06, 300000);
+  const cicilanDiskon6 = (total - diskon6) / tenor;
 
   // Promo 2: Voucher diskon 5% maks 2jt — khusus Erafone/iBox/EC/MII/GTN/GAN
   const diskon5 = Math.min(total * 0.05, 2000000);
@@ -1059,13 +1074,13 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
     <div class="promo-spesial-card promo-s1">
       <div class="promo-sp-label">✨ Diskon 6% — Semua Toko</div>
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon6)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-      <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} dari cicilan pertama (maks Rp 300.000)</div>
+      <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} dari total pembiayaan (maks Rp 300.000)</div>
     </div>
 
     <div class="promo-spesial-card promo-s2">
       <div class="promo-sp-label">🎫 Voucher Diskon 5% — Toko Pilihan</div>
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon5)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-      <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} dari total (maks Rp 2.000.000)</div>
+      <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} dari total pembiayaan (maks Rp 2.000.000)</div>
       <div class="promo-sp-toko">
         <span class="toko-tag">Erafone</span>
         <span class="toko-tag">iBox</span>
