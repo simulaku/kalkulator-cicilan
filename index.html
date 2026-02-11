@@ -1258,32 +1258,31 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
   let promoGratisHTML = '';
   if (tenor === 9) {
     const taP = totalAsuransi + akujagaPerBulan * 9;
-    const baseP = pokok + taP;
 
-    // Reguler admin 7.3%
-    const adminReg = baseP * 0.073;
-    const totalReg = baseP + adminReg;
+    // Reguler admin 8% dari pokok
+    const adminReg = pokok * 0.08;
+    const totalReg = pokok + adminReg + taP;
     const cicilanReg = totalReg / 8;
 
-    // Erafone admin 9%
-    const adminEra = baseP * 0.09;
-    const totalEra = baseP + adminEra;
+    // Erafone admin 9% dari pokok
+    const adminEra = pokok * 0.09;
+    const totalEra = pokok + adminEra + taP;
     const cicilanEra = totalEra / 8;
 
-    // iBox admin 12%
-    const adminIbox = baseP * 0.12;
-    const totalIbox = baseP + adminIbox;
+    // iBox admin 12% dari pokok
+    const adminIbox = pokok * 0.12;
+    const totalIbox = pokok + adminIbox + taP;
     const cicilanIbox = totalIbox / 8;
 
     const subCards = `
       ${subCollapsible(9, 'reguler', '📋 Reguler', '', cicilanReg, totalReg, 'bayar 9× jika terlambat',
-        `(Pokok + Proteksi) × 7.3% = biaya admin<br>Total ÷ 8 bulan = <code>${rupiah(cicilanReg)}/bln</code>`
+        `Pokok × 8% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanReg)}/bln</code>`
       )}
       ${subCollapsible(9, 'erafone', '🔴 Erafone', 'Admin 9%', cicilanEra, totalEra, 'bayar 9× jika terlambat',
-        `(Pokok + Proteksi) × 9% = biaya admin<br>Total ÷ 8 bulan = <code>${rupiah(cicilanEra)}/bln</code>`
+        `Pokok × 9% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanEra)}/bln</code>`
       )}
       ${subCollapsible(9, 'ibox', '🔵 iBox', 'Admin 12%', cicilanIbox, totalIbox, 'bayar 9× jika terlambat',
-        `(Pokok + Proteksi) × 12% = biaya admin<br>Total ÷ 8 bulan = <code>${rupiah(cicilanIbox)}/bln</code>`
+        `Pokok × 12% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanIbox)}/bln</code>`
       )}
     `;
 
