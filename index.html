@@ -683,6 +683,105 @@
   }
   .section-body.open { display: block; }
 
+  /* SUB COLLAPSIBLE (toko khusus dalam gratis cicilan) */
+  .sub-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: all 0.2s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .sub-toggle:active { opacity: 0.75; }
+  .sub-toggle.sub-reguler {
+    background: rgba(110,231,183,0.05);
+    border: 1px solid rgba(110,231,183,0.15);
+  }
+  .sub-toggle.sub-erafone {
+    background: rgba(248,113,113,0.06);
+    border: 1px solid rgba(248,113,113,0.2);
+  }
+  .sub-toggle.sub-ibox {
+    background: rgba(79,142,247,0.06);
+    border: 1px solid rgba(79,142,247,0.2);
+  }
+  .sub-toggle-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sub-reguler .sub-toggle-label { color: var(--accent2); }
+  .sub-erafone .sub-toggle-label { color: var(--danger); }
+  .sub-ibox .sub-toggle-label { color: var(--accent); }
+  .sub-toggle-right {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .sub-toggle-cicilan {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.75;
+  }
+  .sub-chevron {
+    font-size: 10px;
+    color: var(--muted);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .sub-chevron.open { transform: rotate(180deg); }
+  .sub-body {
+    display: none;
+    animation: slideDown 0.2s ease;
+    margin-bottom: 6px;
+    padding: 4px 4px 2px;
+  }
+  .sub-body.open { display: block; }
+  .sub-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .sub-tag.t-reguler { background: rgba(110,231,183,0.12); color: var(--accent2); }
+  .sub-tag.t-erafone { background: rgba(248,113,113,0.12); color: var(--danger); }
+  .sub-tag.t-ibox { background: rgba(79,142,247,0.12); color: var(--accent); }
+  .sub-admin-note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .calc-desc {
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .calc-desc code {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent3);
+    background: rgba(245,158,11,0.08);
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+
   /* ACTIONS */
   .action-bar {
     position: fixed;
@@ -1160,17 +1259,38 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
   if (tenor === 9) {
     const taP = totalAsuransi + akujagaPerBulan * 9;
     const baseP = pokok + taP;
-    const adminP = baseP * 0.073;
-    const totalP = baseP + adminP;
-    const cicilanP = totalP / 8;
+
+    // Reguler admin 7.3%
+    const adminReg = baseP * 0.073;
+    const totalReg = baseP + adminReg;
+    const cicilanReg = totalReg / 8;
+
+    // Erafone admin 9%
+    const adminEra = baseP * 0.09;
+    const totalEra = baseP + adminEra;
+    const cicilanEra = totalEra / 8;
+
+    // iBox admin 12%
+    const adminIbox = baseP * 0.12;
+    const totalIbox = baseP + adminIbox;
+    const cicilanIbox = totalIbox / 8;
+
+    const subCards = `
+      ${subCollapsible(9, 'reguler', '📋 Reguler', '', cicilanReg, totalReg, 'bayar 9× jika terlambat',
+        `(Pokok + Proteksi) × 7.3% = biaya admin<br>Total ÷ 8 bulan = <code>${rupiah(cicilanReg)}/bln</code>`
+      )}
+      ${subCollapsible(9, 'erafone', '🔴 Erafone', 'Admin 9%', cicilanEra, totalEra, 'bayar 9× jika terlambat',
+        `(Pokok + Proteksi) × 9% = biaya admin<br>Total ÷ 8 bulan = <code>${rupiah(cicilanEra)}/bln</code>`
+      )}
+      ${subCollapsible(9, 'ibox', '🔵 iBox', 'Admin 12%', cicilanIbox, totalIbox, 'bayar 9× jika terlambat',
+        `(Pokok + Proteksi) × 12% = biaya admin<br>Total ÷ 8 bulan = <code>${rupiah(cicilanIbox)}/bln</code>`
+      )}
+    `;
+
     promoGratisHTML = sectionCollapsible(
       tenor, 'gratis',
-      '🎁 Gratis 1× Cicilan', cicilanP,
-      `<div class="option-row promo" style="border:none;padding:4px 0">
-        <div class="option-cicilan">${rupiah(cicilanP)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-        <div class="option-total">Total dibayar: ${rupiah(totalP)}</div>
-        <div class="option-warn">⚠️ bayar 9× jika terlambat</div>
-      </div>`
+      '🎁 Gratis 1× Cicilan', cicilanReg,
+      subCards
     );
   }
   if (tenor === 12) {
@@ -1189,6 +1309,11 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
         <div class="option-cicilan">${rupiah(cicilanP)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
         <div class="option-total">Total dibayar: ${rupiah(totalPembiayaanP)}</div>
         <div class="option-warn">⚠️ bayar 12× jika terlambat</div>
+        <div class="calc-desc">
+          
+          (Pokok + Proteksi) × bunga ${(bunga*1.10*100).toFixed(2)}% × 12 + admin 1%<br>
+          Total ÷ 12 = <code>${rupiah(cicilanP)}/bln</code>, dibayar 11 kali
+        </div>
       </div>`
     );
   }
@@ -1207,12 +1332,22 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon6)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
       <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} (maks Rp 300.000)</div>
       <div class="promo-sp-total">Total setelah diskon: ${rupiah(total - diskon6)}</div>
+      <div class="calc-desc">
+        
+        Total × 6% = <code>${rupiah(diskon6)}</code> (maks Rp 300.000)<br>
+        (Total − Diskon) ÷ ${tenor} = <code>${rupiah(cicilanDiskon6)}/bln</code>
+      </div>
     </div>
     <div class="promo-spesial-card promo-s2">
       <div class="promo-sp-label">🎫 Voucher Diskon 5% — Toko Pilihan</div>
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon5)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
       <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} (maks Rp 2.000.000)</div>
       <div class="promo-sp-total">Total setelah diskon: ${rupiah(total - diskon5)}</div>
+      <div class="calc-desc" style="border-color:rgba(79,142,247,0.15)">
+        
+        Total × 5% = <code>${rupiah(diskon5)}</code> (maks Rp 2.000.000)<br>
+        (Total − Diskon) ÷ ${tenor} = <code>${rupiah(cicilanDiskon5)}/bln</code>
+      </div>
       <div class="promo-sp-toko">
         <span class="toko-tag">Erafone</span><span class="toko-tag">iBox</span>
         <span class="toko-tag">EC</span><span class="toko-tag">MII</span>
@@ -1221,7 +1356,6 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
     </div>`
   );
 
-  // Label section standard
   const stdLabel = 'Tanpa Promo';
   const stdHTML = sectionCollapsible(
     tenor, 'standard',
@@ -1229,6 +1363,11 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
     `<div class="option-row" style="border:none;padding:4px 0">
       <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
       <div class="option-total">Total: ${rupiah(total)}</div>
+      <div class="calc-desc">
+        
+        (Pokok + Proteksi) × bunga ${(bunga*100).toFixed(1)}% × ${tenor} bulan<br>
+        Total ÷ ${tenor} = <code>${rupiah(cicilan)}/bln</code>
+      </div>
     </div>`
   );
 
@@ -1266,6 +1405,31 @@ function sectionCollapsible(tenor, type, label, cicilan, bodyHTML) {
     </div>`;
 }
 
+function subCollapsible(tenor, key, label, adminNote, cicilan, total, warn, calcDesc) {
+  const id = `sub-${tenor}-${key}`;
+  const chevId = `subchev-${tenor}-${key}`;
+  return `
+    <div class="sub-toggle sub-${key}" onclick="toggleSub('${id}','${chevId}')">
+      <div class="sub-toggle-label">
+        ${label}
+        ${adminNote ? `<span class="sub-tag t-${key}">${adminNote}</span>` : ''}
+      </div>
+      <div class="sub-toggle-right">
+        <span class="sub-toggle-cicilan">${rupiah(cicilan)}/bln</span>
+        <span class="sub-chevron" id="${chevId}">▼</span>
+      </div>
+    </div>
+    <div class="sub-body" id="${id}">
+      <div class="option-row promo" style="border:none;padding:4px 2px;margin-bottom:0">
+        <div class="sub-admin-note">Biaya admin ${adminNote} dari total pembiayaan</div>
+        <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+        <div class="option-total">Total dibayar: ${rupiah(total)}</div>
+        <div class="option-warn">⚠️ ${warn}</div>
+        ${calcDesc ? `<div class="calc-desc">${calcDesc}</div>` : ''}
+      </div>
+    </div>`;
+}
+
 /* ========== TENOR TOGGLE ========== */
 function toggleTenor(tenor) {
   const body = document.getElementById('tenor-body-' + tenor);
@@ -1277,6 +1441,15 @@ function toggleTenor(tenor) {
 }
 
 function toggleSection(bodyId, chevId) {
+  const body = document.getElementById(bodyId);
+  const chev = document.getElementById(chevId);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chev) chev.classList.toggle('open', !isOpen);
+}
+
+function toggleSub(bodyId, chevId) {
   const body = document.getElementById(bodyId);
   const chev = document.getElementById(chevId);
   if (!body) return;
