@@ -11,12 +11,12 @@
     --surface: #1a1d27;
     --surface2: #22263a;
     --border: #2e3248;
-    --accent: #4f8ef7;
-    --accent2: #6ee7b7;
-    --accent3: #f59e0b;
+    --accent: #ef4444;
+    --accent2: #f87171;
+    --accent3: #fb923c;
     --text: #f0f2ff;
     --muted: #7c849e;
-    --danger: #f87171;
+    --danger: #dc2626;
     --card-radius: 20px;
     --font: 'Plus Jakarta Sans', sans-serif;
     --mono: 'JetBrains Mono', monospace;
@@ -56,15 +56,15 @@
     position: absolute;
     top: -40px; right: -40px;
     width: 160px; height: 160px;
-    background: radial-gradient(circle, rgba(79,142,247,0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(239,68,68,0.15) 0%, transparent 70%);
     border-radius: 50%;
   }
   .header-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(79,142,247,0.12);
-    border: 1px solid rgba(79,142,247,0.25);
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.25);
     color: var(--accent);
     font-size: 11px;
     font-weight: 600;
@@ -129,7 +129,7 @@
     background: var(--accent);
     border-color: var(--accent);
     color: white;
-    box-shadow: 0 0 14px rgba(79,142,247,0.4);
+    box-shadow: 0 0 14px rgba(239,68,68,0.4);
   }
   .step-dot.done {
     background: var(--accent2);
@@ -270,7 +270,7 @@
   }
   .toggle-btn.selected {
     border-color: var(--accent2);
-    background: rgba(110,231,183,0.07);
+    background: rgba(248,113,113,0.07);
   }
   .toggle-btn.selected .toggle-check {
     background: var(--accent2);
@@ -332,7 +332,7 @@
     -webkit-user-select: none; user-select: none;
   }
   .yn-btn:active { transform: scale(0.95); }
-  .yn-btn.yn-yes { border-color: var(--accent2); background: rgba(110,231,183,0.07); }
+  .yn-btn.yn-yes { border-color: var(--accent2); background: rgba(248,113,113,0.07); }
   .yn-btn.yn-no { border-color: var(--border); }
   .yn-icon { font-size: 28px; margin-bottom: 6px; }
   .yn-label { font-size: 13px; font-weight: 700; }
@@ -357,7 +357,7 @@
   .bunga-btn:active { transform: scale(0.94); }
   .bunga-btn.selected {
     border-color: var(--accent);
-    background: rgba(79,142,247,0.1);
+    background: rgba(239,68,68,0.1);
   }
   .bunga-rate {
     font-family: var(--mono);
@@ -369,8 +369,8 @@
 
   /* RESULT */
   .result-header {
-    background: linear-gradient(135deg, rgba(79,142,247,0.15), rgba(110,231,183,0.08));
-    border: 1px solid rgba(79,142,247,0.2);
+    background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(248,113,113,0.08));
+    border: 1px solid rgba(239,68,68,0.2);
     border-radius: var(--card-radius);
     padding: 18px 20px;
     margin-bottom: 14px;
@@ -415,7 +415,7 @@
     -webkit-user-select: none;
   }
   .tenor-badge {
-    background: rgba(79,142,247,0.15);
+    background: rgba(239,68,68,0.15);
     color: var(--accent);
     font-size: 12px;
     font-weight: 800;
@@ -435,8 +435,8 @@
   }
   .option-row:last-child { margin-bottom: 0; }
   .option-row.promo {
-    border-color: rgba(110,231,183,0.3);
-    background: rgba(110,231,183,0.04);
+    border-color: rgba(248,113,113,0.3);
+    background: rgba(248,113,113,0.04);
   }
   .option-label {
     font-size: 11px;
@@ -450,7 +450,7 @@
     gap: 6px;
   }
   .promo-tag {
-    background: rgba(110,231,183,0.15);
+    background: rgba(248,113,113,0.15);
     color: var(--accent2);
     font-size: 10px;
     padding: 2px 7px;
@@ -508,8 +508,20 @@
     border: 1px solid rgba(245,158,11,0.25);
   }
   .promo-s2 {
-    background: rgba(79,142,247,0.07);
-    border: 1px solid rgba(79,142,247,0.25);
+    background: rgba(156,163,175,0.08);
+    border: 1px solid rgba(156,163,175,0.25);
+  }
+  .promo-s-reguler {
+    background: rgba(75,85,99,0.07);
+    border: 1px solid rgba(229,231,235,0.25);
+  }
+  .promo-s-erafone {
+    background: rgba(127,29,29,0.07);
+    border: 1px solid rgba(239,68,68,0.25);
+  }
+  .promo-s-ibox {
+    background: rgba(30,58,138,0.07);
+    border: 1px solid rgba(59,130,246,0.25);
   }
   .promo-sp-label {
     font-size: 11px;
@@ -517,7 +529,10 @@
     color: var(--accent3);
     margin-bottom: 3px;
   }
-  .promo-s2 .promo-sp-label { color: var(--accent); }
+  .promo-s2 .promo-sp-label { color: #9ca3af; }
+  .promo-s-reguler .promo-sp-label { color: #e5e7eb; }
+  .promo-s-erafone .promo-sp-label { color: #ef4444; }
+  .promo-s-ibox .promo-sp-label { color: #3b82f6; }
   .promo-sp-cicilan {
     font-family: var(--mono);
     font-size: 18px;
@@ -537,9 +552,9 @@
     margin-top: 5px;
   }
   .toko-tag {
-    background: rgba(79,142,247,0.12);
-    border: 1px solid rgba(79,142,247,0.2);
-    color: var(--accent);
+    background: rgba(156,163,175,0.12);
+    border: 1px solid rgba(156,163,175,0.3);
+    color: #9ca3af;
     font-size: 10px;
     font-weight: 700;
     padding: 2px 7px;
@@ -559,9 +574,9 @@
     gap: 3px;
   }
   .ptag {
-    background: rgba(110,231,183,0.1);
-    border: 1px solid rgba(110,231,183,0.25);
-    color: var(--accent2);
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    color: #3b82f6;
     font-size: 11px;
     font-weight: 700;
     padding: 3px 9px;
@@ -586,7 +601,7 @@
     width: 26px;
     height: 26px;
     border-radius: 8px;
-    background: rgba(79,142,247,0.12);
+    background: rgba(239,68,68,0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -597,7 +612,7 @@
   }
   .tenor-toggle-icon.open {
     transform: rotate(180deg);
-    background: rgba(110,231,183,0.12);
+    background: rgba(248,113,113,0.12);
     color: var(--accent2);
   }
   .tenor-body {
@@ -621,7 +636,7 @@
     margin-top: 4px;
     font-weight: 600;
   }
-  .promo-s2 .promo-sp-total { color: var(--accent); }
+  .promo-s2 .promo-sp-total { color: #9ca3af; }
 
   /* SECTION COLLAPSIBLE (inner) */
   .section-toggle {
@@ -641,8 +656,8 @@
     border: 1px solid rgba(124,132,158,0.15);
   }
   .section-toggle.s-gratis {
-    background: rgba(110,231,183,0.06);
-    border: 1px solid rgba(110,231,183,0.2);
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.25);
   }
   .section-toggle.s-diskon {
     background: rgba(245,158,11,0.06);
@@ -660,7 +675,7 @@
     letter-spacing: 0.05em;
   }
   .s-standard .section-toggle-label { color: var(--muted); }
-  .s-gratis .section-toggle-label { color: var(--accent2); }
+  .s-gratis .section-toggle-label { color: #22c55e; }
   .s-diskon .section-toggle-label { color: var(--accent3); }
   .section-toggle-cicilan {
     font-family: var(--mono);
@@ -697,16 +712,16 @@
   }
   .sub-toggle:active { opacity: 0.75; }
   .sub-toggle.sub-reguler {
-    background: rgba(110,231,183,0.05);
-    border: 1px solid rgba(110,231,183,0.15);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
   }
   .sub-toggle.sub-erafone {
     background: rgba(248,113,113,0.06);
     border: 1px solid rgba(248,113,113,0.2);
   }
   .sub-toggle.sub-ibox {
-    background: rgba(79,142,247,0.06);
-    border: 1px solid rgba(79,142,247,0.2);
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.25);
   }
   .sub-toggle-label {
     font-size: 11px;
@@ -717,9 +732,9 @@
     align-items: center;
     gap: 6px;
   }
-  .sub-reguler .sub-toggle-label { color: var(--accent2); }
-  .sub-erafone .sub-toggle-label { color: var(--danger); }
-  .sub-ibox .sub-toggle-label { color: var(--accent); }
+  .sub-reguler .sub-toggle-label { color: #e5e7eb; }
+  .sub-erafone .sub-toggle-label { color: #ef4444; }
+  .sub-ibox .sub-toggle-label { color: #3b82f6; }
   .sub-toggle-right {
     display: flex;
     align-items: center;
@@ -754,24 +769,103 @@
     border-radius: 6px;
     margin-bottom: 6px;
   }
-  .sub-tag.t-reguler { background: rgba(110,231,183,0.12); color: var(--accent2); }
-  .sub-tag.t-erafone { background: rgba(248,113,113,0.12); color: var(--danger); }
-  .sub-tag.t-ibox { background: rgba(79,142,247,0.12); color: var(--accent); }
+  .sub-tag.t-reguler { background: rgba(229,231,235,0.12); color: #e5e7eb; }
+  .sub-tag.t-erafone { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .sub-tag.t-ibox { background: rgba(59,130,246,0.12); color: #3b82f6; }
   .sub-admin-note {
     font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    font-style: italic;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: 1px dashed;
+  }
+  .sub-admin-note.admin-reguler { 
+    color: #e5e7eb;
+    background: rgba(229,231,235,0.05);
+    border-color: rgba(229,231,235,0.2);
+  }
+  .sub-admin-note.admin-erafone { 
+    color: #ef4444;
+    background: rgba(239,68,68,0.05);
+    border-color: rgba(239,68,68,0.25);
+  }
+  .sub-admin-note.admin-ibox { 
+    color: #3b82f6;
+    background: rgba(59,130,246,0.05);
+    border-color: rgba(59,130,246,0.25);
+  }
+  .sub-admin-note-simple {
+    font-size: 11px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .sub-admin-note-simple.admin-reguler { 
+    color: #e5e7eb;
+  }
+  .sub-admin-note-simple.admin-erafone { 
+    color: #ef4444;
+  }
+  .sub-admin-note-simple.admin-ibox { 
+    color: #3b82f6;
+  }
+  .asuransi-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  .asuransi-badge {
+    background: rgba(120,53,15,0.25);
+    border: 1px solid rgba(251,146,60,0.3);
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .asuransi-name {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent3);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .asuransi-price {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent3);
   }
   .calc-desc {
-    background: rgba(255,255,255,0.03);
-    border: 1px dashed rgba(255,255,255,0.08);
     border-radius: 8px;
-    padding: 8px 10px;
+    padding: 10px 12px;
     margin-top: 8px;
     font-size: 10px;
     color: var(--muted);
     line-height: 1.6;
+    border: 1px dashed;
+  }
+  .calc-desc.calc-orange {
+    background: rgba(120,53,15,0.3);
+    border-color: rgba(251,146,60,0.4);
+  }
+  .calc-desc.calc-gray {
+    background: rgba(55,65,81,0.3);
+    border-color: rgba(156,163,175,0.4);
+  }
+  .calc-desc.calc-white {
+    background: rgba(75,85,99,0.3);
+    border-color: rgba(229,231,235,0.3);
+  }
+  .calc-desc.calc-red {
+    background: rgba(127,29,29,0.3);
+    border-color: rgba(239,68,68,0.4);
+  }
+  .calc-desc.calc-blue {
+    background: rgba(30,58,138,0.3);
+    border-color: rgba(59,130,246,0.4);
   }
   .calc-desc code {
     font-family: var(--mono);
@@ -811,9 +905,9 @@
   .btn-primary {
     background: var(--accent);
     color: white;
-    box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+    box-shadow: 0 4px 20px rgba(239,68,68,0.3);
   }
-  .btn-primary:active { background: #3d7fe8; }
+  .btn-primary:active { background: #dc2626; }
   .btn-secondary {
     background: var(--surface2);
     color: var(--text);
@@ -836,7 +930,7 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: rgba(79,142,247,0.1);
+    background: rgba(239,68,68,0.1);
     color: var(--accent);
     font-size: 11px;
     padding: 5px 10px;
@@ -1049,7 +1143,6 @@ function updateActionBar(step) {
     bar.innerHTML = `
       <button class="btn btn-secondary" onclick="showScreen(1)">←</button>
       <button class="btn btn-primary" onclick="goToBunga()">Lanjut ke Bunga →</button>`;
-    // Sembunyikan tombol lanjut jika belum pilih pakai proteksi
     updateActionBarStep2();
     return;
   }
@@ -1117,7 +1210,6 @@ function setProteksiYN(yn) {
     document.getElementById('ynYes').className = 'yn-btn';
     document.getElementById('proteksiList').style.display = 'none';
     state.asuransi = [];
-    // Langsung lanjut ke bunga jika pilih tanpa proteksi
     setTimeout(() => showScreen(3), 250);
   }
 }
@@ -1155,7 +1247,6 @@ function updateActionBarStep2() {
   const bar = document.getElementById('actionBar');
   const lanjutBtn = bar.querySelector('.btn-primary');
   if (!lanjutBtn) return;
-  // Tampilkan tombol lanjut hanya jika pilih pakai proteksi
   if (state.pakaProteksi === true) {
     lanjutBtn.style.display = 'flex';
   } else {
@@ -1207,7 +1298,6 @@ function buildResultHTML() {
     proteksiRows.push({ name: 'AKUSIAGA', val: 'Rp 299.000' });
   }
 
-  // Summary header
   let html = `<div class="result-header fade">
     <div class="result-header-row">
       <div class="result-label">Nominal Pokok</div>
@@ -1233,62 +1323,79 @@ function buildResultHTML() {
   }
   html += `</div></div></div>`;
 
-  // Tenor 6
-  html += buildTenorCard(6, pokok, bunga, akujagaPerBulan, totalAsuransi);
-  // Tenor 9
-  html += buildTenorCard(9, pokok, bunga, akujagaPerBulan, totalAsuransi);
-  // Tenor 12
-  html += buildTenorCard(12, pokok, bunga, akujagaPerBulan, totalAsuransi);
+  // Buat string info asuransi
+  let asuransiInfo = '';
+  if (proteksiRows.length > 0) {
+    asuransiInfo = proteksiRows.map(r => `${r.name}: ${r.val}`).join(', ');
+  }
+
+  html += buildTenorCard(6, pokok, bunga, akujagaPerBulan, totalAsuransi, asuransiInfo);
+  html += buildTenorCard(9, pokok, bunga, akujagaPerBulan, totalAsuransi, asuransiInfo);
+  html += buildTenorCard(12, pokok, bunga, akujagaPerBulan, totalAsuransi, asuransiInfo);
 
   return html;
 }
 
-function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
+function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi, asuransiInfo) {
   const cardId = 'tenor-body-' + tenor;
   const iconId = 'tenor-icon-' + tenor;
 
-  // ===== Kalkulasi =====
   const ta = totalAsuransi + akujagaPerBulan * tenor;
   const base = pokok + ta;
   const bungaTotal = base * bunga * tenor;
   const total = base + bungaTotal;
   const cicilan = total / tenor;
 
-  // Promo gratis 1x cicilan
   let promoGratisHTML = '';
   if (tenor === 9) {
     const taP = totalAsuransi + akujagaPerBulan * 9;
 
-    // Reguler admin 8% dari pokok
     const adminReg = pokok * 0.08;
     const totalReg = pokok + adminReg + taP;
     const cicilanReg = totalReg / 8;
 
-    // Erafone admin 9% dari pokok
     const adminEra = pokok * 0.09;
     const totalEra = pokok + adminEra + taP;
     const cicilanEra = totalEra / 8;
 
-    // iBox admin 12% dari pokok
     const adminIbox = pokok * 0.12;
     const totalIbox = pokok + adminIbox + taP;
     const cicilanIbox = totalIbox / 8;
 
+    // Buat HTML badge asuransi jika ada
+    let asuransiHTML = '';
+    if (asuransiInfo) {
+      const asuransiList = state.asuransi;
+      const badges = [];
+      if (asuransiList.includes('AKUJAGA')) {
+        badges.push(`<div class="asuransi-badge"><div class="asuransi-name">AKUJAGA</div><div class="asuransi-price">${rupiah(pokok * 0.006)}/bln</div></div>`);
+      }
+      if (asuransiList.includes('GADGET')) {
+        badges.push(`<div class="asuransi-badge"><div class="asuransi-name">Gadget Pro</div><div class="asuransi-price">${rupiah(gadgetPro(pokok))}</div></div>`);
+      }
+      if (asuransiList.includes('AKUSIAGA')) {
+        badges.push(`<div class="asuransi-badge"><div class="asuransi-name">AKUSIAGA</div><div class="asuransi-price">Rp 299.000</div></div>`);
+      }
+      if (badges.length > 0) {
+        asuransiHTML = `<div class="asuransi-badges">${badges.join('')}</div>`;
+      }
+    }
+
     const subCards = `
       ${subCollapsible(9, 'reguler', '📋 Reguler', '', cicilanReg, totalReg, 'bayar 9× jika terlambat',
-        `Pokok × 8% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanReg)}/bln</code>`
+        `Pokok × 8% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanReg)}/bln</code>`, 'Admin 8%', adminReg, ''
       )}
-      ${subCollapsible(9, 'erafone', '🔴 Erafone', 'Admin 9%', cicilanEra, totalEra, 'bayar 9× jika terlambat',
-        `Pokok × 9% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanEra)}/bln</code>`
+      ${subCollapsible(9, 'erafone', '🔴 Erafone', '', cicilanEra, totalEra, 'bayar 9× jika terlambat',
+        `Pokok × 9% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanEra)}/bln</code>`, 'Admin 9%', adminEra, ''
       )}
-      ${subCollapsible(9, 'ibox', '🔵 iBox', 'Admin 12%', cicilanIbox, totalIbox, 'bayar 9× jika terlambat',
-        `Pokok × 12% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanIbox)}/bln</code>`
+      ${subCollapsible(9, 'ibox', '🔵 iBox/GTN/Digimap', '', cicilanIbox, totalIbox, 'bayar 9× jika terlambat',
+        `Pokok × 12% = biaya admin<br>(Pokok + Admin + Proteksi) ÷ 8 = <code>${rupiah(cicilanIbox)}/bln</code>`, 'Admin 12%', adminIbox, ''
       )}
     `;
 
     promoGratisHTML = sectionCollapsible(
       tenor, 'gratis',
-      '🎁 Gratis 1× Cicilan', cicilanReg,
+      '🎁 Bunga 0%', cicilanReg,
       subCards
     );
   }
@@ -1301,15 +1408,17 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
     const totalP = baseP + bungaTotalP + adminNominal;
     const cicilanP = totalP / 12;
     const totalPembiayaanP = cicilanP * 11;
+    
     promoGratisHTML = sectionCollapsible(
       tenor, 'gratis',
       '🎁 Gratis 1× Cicilan', cicilanP,
-      `<div class="option-row promo" style="border:none;padding:4px 0">
-        <div class="option-cicilan">${rupiah(cicilanP)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-        <div class="option-total">Total dibayar: ${rupiah(totalPembiayaanP)}</div>
-        <div class="option-warn">⚠️ bayar 12× jika terlambat</div>
-        <div class="calc-desc">
-          
+      `<div class="promo-spesial-card promo-s-reguler">
+        <div class="promo-sp-label">✨ Gratis Cicilan 1× — Reguler</div>
+        <div class="promo-sp-cicilan">${rupiah(cicilanP)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+        <div class="promo-sp-detail">Total dibayar: ${rupiah(totalPembiayaanP)}</div>
+        <div class="promo-sp-total">⚠️ bayar 12× jika terlambat</div>
+        <div class="sub-admin-note-simple admin-reguler">Admin 1%: ${rupiah(adminNominal)}</div>
+        <div class="calc-desc calc-white">
           (Pokok + Proteksi) × bunga ${(bunga*1.10*100).toFixed(2)}% × 12 + admin 1%<br>
           Total ÷ 12 = <code>${rupiah(cicilanP)}/bln</code>, dibayar 11 kali
         </div>
@@ -1317,7 +1426,6 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
     );
   }
 
-  // Promo spesial diskon
   const diskon6 = Math.min(total * 0.06, 300000);
   const cicilanDiskon6 = (total - diskon6) / tenor;
   const diskon5 = Math.min(total * 0.05, 2000000);
@@ -1331,8 +1439,7 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon6)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
       <div class="promo-sp-detail">Hemat ${rupiah(diskon6)} (maks Rp 300.000)</div>
       <div class="promo-sp-total">Total setelah diskon: ${rupiah(total - diskon6)}</div>
-      <div class="calc-desc">
-        
+      <div class="calc-desc calc-orange">
         Total × 6% = <code>${rupiah(diskon6)}</code> (maks Rp 300.000)<br>
         (Total − Diskon) ÷ ${tenor} = <code>${rupiah(cicilanDiskon6)}/bln</code>
       </div>
@@ -1342,8 +1449,7 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
       <div class="promo-sp-cicilan">${rupiah(cicilanDiskon5)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
       <div class="promo-sp-detail">Hemat ${rupiah(diskon5)} (maks Rp 2.000.000)</div>
       <div class="promo-sp-total">Total setelah diskon: ${rupiah(total - diskon5)}</div>
-      <div class="calc-desc" style="border-color:rgba(79,142,247,0.15)">
-        
+      <div class="calc-desc calc-gray">
         Total × 5% = <code>${rupiah(diskon5)}</code> (maks Rp 2.000.000)<br>
         (Total − Diskon) ÷ ${tenor} = <code>${rupiah(cicilanDiskon5)}/bln</code>
       </div>
@@ -1363,7 +1469,6 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi) {
       <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
       <div class="option-total">Total: ${rupiah(total)}</div>
       <div class="calc-desc">
-        
         (Pokok + Proteksi) × bunga ${(bunga*100).toFixed(1)}% × ${tenor} bulan<br>
         Total ÷ ${tenor} = <code>${rupiah(cicilan)}/bln</code>
       </div>
@@ -1404,9 +1509,26 @@ function sectionCollapsible(tenor, type, label, cicilan, bodyHTML) {
     </div>`;
 }
 
-function subCollapsible(tenor, key, label, adminNote, cicilan, total, warn, calcDesc) {
+function subCollapsible(tenor, key, label, adminNote, cicilan, total, warn, calcDesc, adminInfo, adminTotal, asuransiInfo) {
   const id = `sub-${tenor}-${key}`;
   const chevId = `subchev-${tenor}-${key}`;
+  const adminClass = `admin-${key}`;
+  // Mapping warna untuk calc-desc
+  const calcColorMap = {
+    'reguler': 'calc-white',
+    'erafone': 'calc-red',
+    'ibox': 'calc-blue'
+  };
+  const calcColorClass = calcColorMap[key] || '';
+  
+  // Mapping label promo
+  const promoLabelMap = {
+    'reguler': '✨ Gratis Cicilan 1× — Reguler',
+    'erafone': '✨ Gratis Cicilan 1× — Erafone',
+    'ibox': '✨ Gratis Cicilan 1× — iBox/GTN/Digimap'
+  };
+  const promoLabel = promoLabelMap[key] || label;
+  
   return `
     <div class="sub-toggle sub-${key}" onclick="toggleSub('${id}','${chevId}')">
       <div class="sub-toggle-label">
@@ -1419,17 +1541,18 @@ function subCollapsible(tenor, key, label, adminNote, cicilan, total, warn, calc
       </div>
     </div>
     <div class="sub-body" id="${id}">
-      <div class="option-row promo" style="border:none;padding:4px 2px;margin-bottom:0">
-        <div class="sub-admin-note">Biaya admin ${adminNote} dari total pembiayaan</div>
-        <div class="option-cicilan">${rupiah(cicilan)}<span style="font-size:13px;color:var(--muted);font-family:var(--font)">/bln</span></div>
-        <div class="option-total">Total dibayar: ${rupiah(total)}</div>
-        <div class="option-warn">⚠️ ${warn}</div>
-        ${calcDesc ? `<div class="calc-desc">${calcDesc}</div>` : ''}
+      <div class="promo-spesial-card promo-s-${key}">
+        <div class="promo-sp-label">${promoLabel}</div>
+        <div class="promo-sp-cicilan">${rupiah(cicilan)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
+        <div class="promo-sp-detail">Total dibayar: ${rupiah(total)}</div>
+        <div class="promo-sp-total">${warn}</div>
+        ${asuransiInfo ? asuransiInfo : ''}
+        ${adminInfo && adminTotal ? `<div class="sub-admin-note-simple ${adminClass}">${adminInfo}: ${rupiah(adminTotal)}</div>` : ''}
+        ${calcDesc ? `<div class="calc-desc ${calcColorClass}">${calcDesc}</div>` : ''}
       </div>
     </div>`;
 }
 
-/* ========== TENOR TOGGLE ========== */
 function toggleTenor(tenor) {
   const body = document.getElementById('tenor-body-' + tenor);
   const icon = document.getElementById('tenor-icon-' + tenor);
@@ -1457,7 +1580,6 @@ function toggleSub(bodyId, chevId) {
   if (chev) chev.classList.toggle('open', !isOpen);
 }
 
-/* ========== RESET ========== */
 function resetAll() {
   state = { nominal: '', asuransi: [], pakaProteksi: null, bunga: null };
   document.getElementById('nominalDisplay').textContent = 'Masukkan jumlah...';
@@ -1470,7 +1592,6 @@ function resetAll() {
   showScreen(1);
 }
 
-/* ========== UTIL ========== */
 function gadgetPro(n) {
   if (n <= 2000000) return 159000;
   if (n <= 3000000) return 199000;
@@ -1485,12 +1606,10 @@ function rupiah(n) {
   return 'Rp ' + Math.round(n).toLocaleString('id-ID');
 }
 
-// Shake animation
 const style = document.createElement('style');
 style.textContent = `@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }`;
 document.head.appendChild(style);
 
-// Init
 updateProgress(1);
 updateActionBar(1);
 </script>
