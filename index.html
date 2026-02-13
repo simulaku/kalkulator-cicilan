@@ -48,7 +48,9 @@
   .header {
     background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
     padding: 54px 24px 28px;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     border-bottom: 1px solid var(--border);
   }
   .header::before {
@@ -107,6 +109,10 @@
   /* PROGRESS */
   .progress-wrap {
     padding: 18px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background: var(--bg);
   }
   .progress-steps {
     display: flex;
@@ -799,15 +805,16 @@
     font-size: 11px;
     margin-top: 8px;
     font-weight: 600;
+    color: #6b7280;
   }
   .sub-admin-note-simple.admin-reguler { 
-    color: #e5e7eb;
+    color: #6b7280;
   }
   .sub-admin-note-simple.admin-erafone { 
-    color: #ef4444;
+    color: #6b7280;
   }
   .sub-admin-note-simple.admin-ibox { 
-    color: #3b82f6;
+    color: #6b7280;
   }
   .asuransi-badges {
     display: flex;
@@ -1417,10 +1424,10 @@ function buildTenorCard(tenor, pokok, bunga, akujagaPerBulan, totalAsuransi, asu
         <div class="promo-sp-cicilan">${rupiah(cicilanP)}<span style="font-size:12px;color:var(--muted);font-family:var(--font)">/bln</span></div>
         <div class="promo-sp-detail">Total dibayar: ${rupiah(totalPembiayaanP)}</div>
         <div class="promo-sp-total">⚠️ bayar 12× jika terlambat</div>
-        <div class="sub-admin-note-simple admin-reguler">Admin 1%: ${rupiah(adminNominal)}</div>
         <div class="calc-desc calc-white">
           (Pokok + Proteksi) × bunga ${(bunga*1.10*100).toFixed(2)}% × 12 + admin 1%<br>
           Total ÷ 12 = <code>${rupiah(cicilanP)}/bln</code>, dibayar 11 kali
+          <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.1);" class="sub-admin-note-simple admin-reguler">Admin 1%: ${rupiah(adminNominal)}</div>
         </div>
       </div>`
     );
@@ -1547,8 +1554,10 @@ function subCollapsible(tenor, key, label, adminNote, cicilan, total, warn, calc
         <div class="promo-sp-detail">Total dibayar: ${rupiah(total)}</div>
         <div class="promo-sp-total">${warn}</div>
         ${asuransiInfo ? asuransiInfo : ''}
-        ${adminInfo && adminTotal ? `<div class="sub-admin-note-simple ${adminClass}">${adminInfo}: ${rupiah(adminTotal)}</div>` : ''}
-        ${calcDesc ? `<div class="calc-desc ${calcColorClass}">${calcDesc}</div>` : ''}
+        ${calcDesc ? `<div class="calc-desc ${calcColorClass}">
+          ${calcDesc}
+          ${adminInfo && adminTotal ? `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.1);" class="sub-admin-note-simple ${adminClass}">${adminInfo}: ${rupiah(adminTotal)}</div>` : ''}
+        </div>` : ''}
       </div>
     </div>`;
 }
